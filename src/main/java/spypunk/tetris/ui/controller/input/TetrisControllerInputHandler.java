@@ -8,6 +8,8 @@
 
 package spypunk.tetris.ui.controller.input;
 
+import java.util.ArrayList;
+
 public interface TetrisControllerInputHandler {
 
     void onKeyPressed(int keyCode);
@@ -17,4 +19,8 @@ public interface TetrisControllerInputHandler {
     void onProjectURLClicked();
 
     void handleInputs();
+    
+    void changeControls(ArrayList<Integer> controllers);
+
+    ArrayList<Integer> getControls();
 }

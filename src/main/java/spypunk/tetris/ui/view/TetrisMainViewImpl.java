@@ -32,8 +32,11 @@ import javax.swing.WindowConstants;
 
 import spypunk.tetris.guice.TetrisModule.TetrisProvider;
 import spypunk.tetris.model.Tetris;
+import spypunk.tetris.service.TetrisService;
+import spypunk.tetris.sound.service.SoundService;
 import spypunk.tetris.ui.cache.ImageCache;
 import spypunk.tetris.ui.controller.TetrisController;
+import spypunk.tetris.ui.controller.input.TetrisControllerInputHandler;
 import spypunk.tetris.ui.font.cache.FontCache;
 import spypunk.tetris.ui.icon.Icon;
 import spypunk.tetris.ui.util.SwingUtils;
@@ -45,7 +48,11 @@ public class TetrisMainViewImpl extends AbstractView implements TetrisMainView {
 
     private final JLabel muteLabel;
 
+    private final JLabel settingsLabel;
+
     private final ImageIcon muteImageIcon;
+
+    private final ImageIcon settingsIcon;
 
     private final ImageIcon unmuteImageIcon;
 
@@ -110,28 +117,43 @@ public class TetrisMainViewImpl extends AbstractView implements TetrisMainView {
     }
 
     @Inject
-    public TetrisMainViewImpl(final TetrisController tetrisController,
-            final FontCache fontCache,
-            final ImageCache imageCache,
-            final @TetrisProvider Tetris tetris) {
+    public TetrisMainViewImpl(final TetrisController tetrisController, final FontCache fontCache,
+            final ImageCache imageCache, final @TetrisProvider Tetris tetris, final TetrisControllerInputHandler tetrisControllerInputHandler,
+            final TetrisService tetrisService, final SoundService soundService, final TetrisMainView tetrisMainView) {
         super(fontCache, imageCache, tetris);
 
         final TetrisStatisticsView tetrisStatisticsView = new TetrisStatisticsView(fontCache, imageCache, tetris);
         final TetrisInfoView tetrisInfoView = new TetrisInfoView(fontCache, imageCache, tetris);
         final TetrisGridView tetrisGridView = new TetrisGridView(fontCache, imageCache, tetris);
 
+        settingsIcon = new ImageIcon(imageCache.getIcon(Icon.SETTINGS));
         muteImageIcon = new ImageIcon(imageCache.getIcon(Icon.MUTE));
         unmuteImageIcon = new ImageIcon(imageCache.getIcon(Icon.UNMUTE));
 
         final URI projectURI = tetris.getProjectURI();
 
         muteLabel = new JLabel(unmuteImageIcon);
+        settingsLabel = new JLabel(settingsIcon);
+
+        settingsLabel.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent aEv) {
+                new TetrisSettingsView(fontCache, tetrisControllerInputHandler, tetrisService,soundService,tetris,tetrisMainView);
+            }
+        });
+
 
         final JLabel urlLabel = new JLabel(projectURI.getHost() + projectURI.getPath());
 
         urlLabel.setFont(fontCache.getURLFont());
         urlLabel.setForeground(DEFAULT_FONT_COLOR);
         urlLabel.addMouseListener(new URLLabelMouseAdapter(tetrisController, urlLabel));
+
+        final JPanel upperPanel = new JPanel(new BorderLayout());
+
+        upperPanel.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
+        upperPanel.setBackground(Color.BLACK);
+
+        upperPanel.add(settingsLabel, BorderLayout.EAST);
 
         final JPanel bottomPanel = new JPanel(new BorderLayout());
 
@@ -160,6 +182,7 @@ public class TetrisMainViewImpl extends AbstractView implements TetrisMainView {
         frame.setIconImage(imageCache.getIcon(Icon.ICON));
         frame.setIgnoreRepaint(true);
 
+        frame.add(upperPanel, BorderLayout.NORTH);
         frame.add(centerPanel, BorderLayout.CENTER);
         frame.add(bottomPanel, BorderLayout.SOUTH);
         frame.pack();

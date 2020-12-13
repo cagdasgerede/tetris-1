@@ -8,7 +8,7 @@
 
 package spypunk.tetris.ui.controller.input;
 
-import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
 
@@ -21,6 +21,7 @@ import com.google.common.collect.Sets;
 import spypunk.tetris.ui.controller.command.TetrisControllerCommand;
 import spypunk.tetris.ui.controller.command.cache.TetrisControllerCommandCache;
 import spypunk.tetris.ui.controller.command.cache.TetrisControllerCommandCache.TetrisControllerCommandType;
+import spypunk.tetris.ui.view.TetrisControlsHandler;
 
 @Singleton
 public class TetrisControllerInputHandlerImpl implements TetrisControllerInputHandler {
@@ -33,21 +34,21 @@ public class TetrisControllerInputHandlerImpl implements TetrisControllerInputHa
 
     private final TetrisControllerCommandCache tetrisControllerCommandCache;
 
+    ArrayList<Integer> controls = new ArrayList<Integer>();
+    
+    TetrisControlsHandler tetrisControlsHandler;
+
     @Inject
-    public TetrisControllerInputHandlerImpl(final TetrisControllerCommandCache tetrisControllerCommandCache) {
+    public TetrisControllerInputHandlerImpl(final TetrisControllerCommandCache tetrisControllerCommandCache,
+            final TetrisControlsHandler tetrisControlsHandler) {
         this.tetrisControllerCommandCache = tetrisControllerCommandCache;
+        this.tetrisControlsHandler = tetrisControlsHandler;
+        if (tetrisControlsHandler.getControls().size() == 0) {
+            tetrisControlsHandler.setDefault();
+        }
 
-        pressedKeyEventCommandTypes.put(KeyEvent.VK_LEFT, TetrisControllerCommandType.LEFT);
-        pressedKeyEventCommandTypes.put(KeyEvent.VK_RIGHT, TetrisControllerCommandType.RIGHT);
-        pressedKeyEventCommandTypes.put(KeyEvent.VK_DOWN, TetrisControllerCommandType.DOWN);
-
-        releasedKeyEventCommandTypes.put(KeyEvent.VK_UP, TetrisControllerCommandType.ROTATE);
-        releasedKeyEventCommandTypes.put(KeyEvent.VK_SPACE, TetrisControllerCommandType.NEW_GAME);
-        releasedKeyEventCommandTypes.put(KeyEvent.VK_P, TetrisControllerCommandType.PAUSE);
-        releasedKeyEventCommandTypes.put(KeyEvent.VK_M, TetrisControllerCommandType.MUTE);
-        releasedKeyEventCommandTypes.put(KeyEvent.VK_PAGE_UP, TetrisControllerCommandType.INCREASE_VOLUME);
-        releasedKeyEventCommandTypes.put(KeyEvent.VK_PAGE_DOWN, TetrisControllerCommandType.DECREASE_VOLUME);
-        releasedKeyEventCommandTypes.put(KeyEvent.VK_CONTROL, TetrisControllerCommandType.HARD_DROP);
+        controls = tetrisControlsHandler.getControls();
+        setControls(controls);
     }
 
     @Override
@@ -70,9 +71,7 @@ public class TetrisControllerInputHandlerImpl implements TetrisControllerInputHa
         if (triggeredCommands.isEmpty()) {
             return;
         }
-
-        triggeredCommands.stream()
-                .map(tetrisControllerCommandCache::getTetrisControllerCommand)
+        triggeredCommands.stream().map(tetrisControllerCommandCache::getTetrisControllerCommand)
                 .forEach(TetrisControllerCommand::execute);
 
         triggeredCommands.clear();
@@ -84,5 +83,46 @@ public class TetrisControllerInputHandlerImpl implements TetrisControllerInputHa
 
             triggeredCommands.add(commandType);
         }
+    }
+
+    public ArrayList<Integer> getControls() {
+        return controls;
+    }
+
+    public void setControls(ArrayList<Integer> control) {
+
+        pressedKeyEventCommandTypes.put(controls.get(0), TetrisControllerCommandType.LEFT);
+        pressedKeyEventCommandTypes.put(controls.get(1), TetrisControllerCommandType.RIGHT);
+        pressedKeyEventCommandTypes.put(controls.get(2), TetrisControllerCommandType.DOWN);
+
+        releasedKeyEventCommandTypes.put(controls.get(3), TetrisControllerCommandType.ROTATE);
+        releasedKeyEventCommandTypes.put(controls.get(4), TetrisControllerCommandType.NEW_GAME);
+        releasedKeyEventCommandTypes.put(controls.get(5), TetrisControllerCommandType.PAUSE);
+        releasedKeyEventCommandTypes.put(controls.get(6), TetrisControllerCommandType.MUTE);
+        releasedKeyEventCommandTypes.put(controls.get(7), TetrisControllerCommandType.INCREASE_VOLUME);
+        releasedKeyEventCommandTypes.put(controls.get(8), TetrisControllerCommandType.DECREASE_VOLUME);
+        releasedKeyEventCommandTypes.put(controls.get(9), TetrisControllerCommandType.HARD_DROP);
+
+    }
+
+    public void changeControls(ArrayList<Integer> controllers) {
+        if (controls != controllers) {
+            for (int i = 0; i < controls.size(); i++) {
+                if (controls.get(i) != controllers.get(i)) {
+                    if (i < 3) {
+                        pressedKeyEventCommandTypes.remove(controls.get(i));
+                        controls.set(i, controllers.get(i));
+                        setControls(controls);
+                    } else {
+
+                        releasedKeyEventCommandTypes.remove(controls.get(i));
+                        controls.set(i, controllers.get(i));
+                        setControls(controls);
+                    }
+                }
+            }
+        }
+
+        tetrisControlsHandler.setNewControllers(controls);
     }
 }
