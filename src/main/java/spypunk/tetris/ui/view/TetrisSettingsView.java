@@ -37,6 +37,7 @@ public class TetrisSettingsView extends JFrame {
         this.tetrisControllerInputHandler = tetrisControllerInputHandler;
         this.tetrisService = tetrisServic;
 
+        pauseGame();
 
         TetrisSettingsView tetrisSettingsView = this;
 
@@ -306,6 +307,7 @@ public class TetrisSettingsView extends JFrame {
         buttonSave.addMouseListener(new MouseListener() {
             public void mouseClicked(MouseEvent aEv) {
                 setControls();
+                pauseGame();
                 tetrisSettingsView.dispose();
             }
 
@@ -510,6 +512,18 @@ public class TetrisSettingsView extends JFrame {
                 break;
         }
 
+    }
+
+    void pauseGame() {
+        tetrisService.pause();
+
+        final State state = tetris.getState();
+
+        if (State.PAUSED.equals(state)) {
+            soundService.pauseMusic();
+        } else if (State.RUNNING.equals(state)) {
+            soundService.resumeMusic();
+        }
     }
 
 }
