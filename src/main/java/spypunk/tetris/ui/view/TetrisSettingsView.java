@@ -331,6 +331,34 @@ public class TetrisSettingsView extends JFrame {
 
         buttonMute = new JButton("MUTE");
 
+        buttonMute.addMouseListener(new MouseListener() {
+            public void mouseClicked(MouseEvent aEv) {
+                tetrisService.mute();
+
+                final boolean muted = tetris.isMuted();
+
+                tetrisMainView.setMuted(muted);
+                soundService.setMuted(muted);
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+            }
+
+        });
+
         JLabel label = new JLabel(SETTINGS);
         label.setFont(fontCache.getDefaultFont());
         label.setForeground(Color.WHITE);
