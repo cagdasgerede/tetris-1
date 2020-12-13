@@ -48,6 +48,8 @@ public class TetrisControllerInputHandlerImpl implements TetrisControllerInputHa
         releasedKeyEventCommandTypes.put(KeyEvent.VK_PAGE_UP, TetrisControllerCommandType.INCREASE_VOLUME);
         releasedKeyEventCommandTypes.put(KeyEvent.VK_PAGE_DOWN, TetrisControllerCommandType.DECREASE_VOLUME);
         releasedKeyEventCommandTypes.put(KeyEvent.VK_CONTROL, TetrisControllerCommandType.HARD_DROP);
+        releasedKeyEventCommandTypes.put(KeyEvent.VK_S, TetrisControllerCommandType.SAVE_GAME);
+        releasedKeyEventCommandTypes.put(KeyEvent.VK_L, TetrisControllerCommandType.LOAD_GAME);
     }
 
     @Override

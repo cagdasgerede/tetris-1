@@ -11,10 +11,11 @@ package spypunk.tetris.model;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.List;
+import java.io.Serializable;
 
 import com.google.common.collect.Lists;
 
-public class Shape {
+public class Shape implements Serializable{
 
     private final ShapeType shapeType;
 
@@ -24,7 +25,7 @@ public class Shape {
 
     private final List<Block> blocks = Lists.newArrayList();
 
-    public class Block {
+    public class Block implements Serializable{
 
         private Point location;
 

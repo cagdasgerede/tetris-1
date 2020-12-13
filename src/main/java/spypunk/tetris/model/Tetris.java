@@ -12,7 +12,7 @@ import java.awt.Point;
 import java.net.URI;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
+import com.google.common.base.Optional;
 
 import spypunk.tetris.model.Shape.Block;
 
@@ -72,6 +72,8 @@ public class Tetris {
     public void setTetrisInstance(final TetrisInstance tetrisInstance) {
         this.tetrisInstance = tetrisInstance;
     }
+
+    public TetrisInstance getTetrisInstance(){ return tetrisInstance; }
 
     public boolean isMuted() {
         return muted;

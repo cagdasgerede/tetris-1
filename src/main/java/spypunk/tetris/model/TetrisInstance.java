@@ -12,17 +12,20 @@ import java.awt.Point;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
+//import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import spypunk.tetris.model.Shape.Block;
 import spypunk.tetris.model.Tetris.State;
 
-public class TetrisInstance {
+import java.io.Serializable;
+
+public class TetrisInstance implements Serializable{
 
     private final Map<Point, Block> blocks = Maps.newHashMap();
 
@@ -36,7 +39,7 @@ public class TetrisInstance {
 
     private Shape nextShape;
 
-    private Optional<Movement> movement = Optional.empty();
+    private Optional<Movement> movement = Optional.absent();
 
     private int level;
 
@@ -155,9 +158,7 @@ public class TetrisInstance {
         this.hardDropEnabled = hardDropEnabled;
     }
 
-    public State getState() {
-        return state;
-    }
+    public State getState() { return state; }
 
     public void setState(final State state) {
         this.state = state;

@@ -15,7 +15,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
+//import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -24,6 +24,7 @@ import javax.inject.Singleton;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
+import com.google.common.base.Optional;
 
 import spypunk.tetris.factory.ShapeFactory;
 import spypunk.tetris.guice.TetrisModule.TetrisProvider;
@@ -140,7 +141,7 @@ public class TetrisServiceImpl implements TetrisService {
         if (optionalMovement.isPresent()) {
             final Movement movement = optionalMovement.get();
 
-            tetris.setMovement(Optional.empty());
+            tetris.setMovement(Optional.absent());
 
             final boolean isDownMovement = Movement.DOWN.equals(movement);
 
