@@ -38,11 +38,8 @@ public class TetrisSettingsView extends JFrame {
         this.tetrisService = tetrisServic;
 
         pauseGame();
-
         TetrisSettingsView tetrisSettingsView = this;
-
         textFields = new ArrayList<JTextField>();
-
         controls = new ArrayList<Integer>();
         controllers = new ArrayList<Integer>();
         controls = tetrisControllerInputHandler.getControls();
@@ -55,33 +52,20 @@ public class TetrisSettingsView extends JFrame {
         int height = this.getSize().height;
         int x = (dim.width - width) / 2;
         int y = (dim.height - height) / 3;
-
         this.setLocation(x, y);
-
         JPanel p1 = new JPanel();
-
         p1.setLayout(new GridLayout(10, 2));
-
         FlowLayout layout = new FlowLayout();
-
         FlowLayout layoutText = new FlowLayout();
-
         JPanel p3 = new JPanel();
-
         p3.setLayout(layoutText);
-
         JPanel p2 = new JPanel();
-
         p2.setLayout(layout);
-
         p1.setBackground(Color.BLACK);
         p2.setBackground(Color.BLACK);
         p3.setBackground(Color.BLACK);
-
         JLabel left, right, down, rotate, newgame, pause, mute, incvolume, decvolume, harddrop;
-
         JButton buttonSave, buttonMute;
-
         left = new JLabel("LEFT");
         left.setFont(fontCache.getDefaultFont());
         left.setForeground(Color.WHITE);

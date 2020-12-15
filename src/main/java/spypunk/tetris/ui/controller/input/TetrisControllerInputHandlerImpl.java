@@ -71,7 +71,8 @@ public class TetrisControllerInputHandlerImpl implements TetrisControllerInputHa
         if (triggeredCommands.isEmpty()) {
             return;
         }
-        triggeredCommands.stream().map(tetrisControllerCommandCache::getTetrisControllerCommand)
+        triggeredCommands.stream()
+                .map(tetrisControllerCommandCache::getTetrisControllerCommand)
                 .forEach(TetrisControllerCommand::execute);
 
         triggeredCommands.clear();
@@ -89,7 +90,7 @@ public class TetrisControllerInputHandlerImpl implements TetrisControllerInputHa
         return controls;
     }
 
-    public void setControls(ArrayList<Integer> control) {
+    private void setControls(ArrayList<Integer> control) {
 
         pressedKeyEventCommandTypes.put(controls.get(0), TetrisControllerCommandType.LEFT);
         pressedKeyEventCommandTypes.put(controls.get(1), TetrisControllerCommandType.RIGHT);
