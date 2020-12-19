@@ -563,7 +563,7 @@ public class TetrisSettingsView extends JFrame {
     }
 
     
-    private boolean checkControllersHaveDuplicate(ArrayList<Integer> controls) {
+    public boolean checkControllersHaveDuplicate(ArrayList<Integer> controls) {
 
         HashSet<Integer> hashSet = new HashSet<Integer>(controls);
         if(hashSet.size() < controls.size())
