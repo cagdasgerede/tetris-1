@@ -15,9 +15,23 @@ import java.util.HashSet;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import spypunk.tetris.ui.util.SwingUtils;
 
 public class TetrisSettingsView extends JFrame {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(TetrisSettingsView.class);
+
+    private static final String USER_HOME = System.getProperty("user.home");
+
+    private static final String ERROR_TITLE = "Error";
+
+    private static final String ERROR_MESSAGE_TEMPLATE = "Controllers cannot be the same, check the log file %s%s.spypunk-tetris%stetris.log for more information";
+
+    private static final String ERROR_MESSAGE = String.format(ERROR_MESSAGE_TEMPLATE, USER_HOME, File.separator,
+        File.separator);
     private final TetrisControllerInputHandler tetrisControllerInputHandler;
     private final TetrisService tetrisService;
     private final SoundService soundService;
@@ -298,13 +312,10 @@ public class TetrisSettingsView extends JFrame {
                     tetrisSettingsView.dispose();
                 } else {
                     try {
-                        JOptionPane.showMessageDialog(tetrisSettingsView,
-                        "WARNING.",
-                        "Controllers cannot be the same",
-                        JOptionPane.WARNING_MESSAGE);;
+                        SwingUtils.doInAWTThread(TetrisSettingsView::showErrorDialog);
                         throw new Exception("Same controllers");
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        LOGGER.error(e.getMessage(), e);
                     }
                 }
             }
@@ -555,12 +566,18 @@ public class TetrisSettingsView extends JFrame {
     private boolean checkControllersHaveDuplicate(ArrayList<Integer> controls) {
 
         HashSet<Integer> hashSet = new HashSet<Integer>(controls);
-        System.out.println(hashSet);
         if(hashSet.size() < controls.size())
             return false;
 
         return true;
 
+    }
+
+    private static void showErrorDialog() {
+        JOptionPane.showMessageDialog(null,
+            ERROR_MESSAGE,
+            ERROR_TITLE,
+            JOptionPane.ERROR_MESSAGE);
     }
 
 }
