@@ -38,6 +38,8 @@ public class TetrisControllerInputHandlerImpl implements TetrisControllerInputHa
     
     TetrisControlsHandler tetrisControlsHandler;
 
+    final int START_OF_RELEASED_KEY_EVENTS = 3;
+
     @Inject
     public TetrisControllerInputHandlerImpl(final TetrisControllerCommandCache tetrisControllerCommandCache,
             final TetrisControlsHandler tetrisControlsHandler) {
@@ -91,7 +93,6 @@ public class TetrisControllerInputHandlerImpl implements TetrisControllerInputHa
     }
 
     private void setControls(ArrayList<Integer> control) {
-
         pressedKeyEventCommandTypes.put(controls.get(0), TetrisControllerCommandType.LEFT);
         pressedKeyEventCommandTypes.put(controls.get(1), TetrisControllerCommandType.RIGHT);
         pressedKeyEventCommandTypes.put(controls.get(2), TetrisControllerCommandType.DOWN);
@@ -103,19 +104,17 @@ public class TetrisControllerInputHandlerImpl implements TetrisControllerInputHa
         releasedKeyEventCommandTypes.put(controls.get(7), TetrisControllerCommandType.INCREASE_VOLUME);
         releasedKeyEventCommandTypes.put(controls.get(8), TetrisControllerCommandType.DECREASE_VOLUME);
         releasedKeyEventCommandTypes.put(controls.get(9), TetrisControllerCommandType.HARD_DROP);
-
     }
 
     public void changeControls(ArrayList<Integer> controllers) {
         if (controls != controllers) {
             for (int i = 0; i < controls.size(); i++) {
                 if (controls.get(i) != controllers.get(i)) {
-                    if (i < 3) {
+                    if (i < START_OF_RELEASED_KEY_EVENTS) {
                         pressedKeyEventCommandTypes.remove(controls.get(i));
                         controls.set(i, controllers.get(i));
                         setControls(controls);
                     } else {
-
                         releasedKeyEventCommandTypes.remove(controls.get(i));
                         controls.set(i, controllers.get(i));
                         setControls(controls);

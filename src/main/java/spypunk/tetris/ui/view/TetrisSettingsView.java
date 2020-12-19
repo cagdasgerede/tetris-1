@@ -11,6 +11,7 @@ import spypunk.tetris.ui.controller.input.TetrisControllerInputHandler;
 import spypunk.tetris.ui.font.cache.FontCache;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -291,8 +292,21 @@ public class TetrisSettingsView extends JFrame {
         buttonSave.addMouseListener(new MouseListener() {
             public void mouseClicked(MouseEvent aEv) {
                 setControls();
-                pauseGame();
-                tetrisSettingsView.dispose();
+                if (checkControllersHaveDuplicate(controllers)) {
+                    tetrisControllerInputHandler.changeControls(controllers);
+                    pauseGame();
+                    tetrisSettingsView.dispose();
+                } else {
+                    try {
+                        JOptionPane.showMessageDialog(tetrisSettingsView,
+                        "WARNING.",
+                        "Controllers cannot be the same",
+                        JOptionPane.WARNING_MESSAGE);;
+                        throw new Exception("Same controllers");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
             }
 
             @Override
@@ -453,7 +467,6 @@ public class TetrisSettingsView extends JFrame {
         controllers.set(7, decideTheKey(tincvolume.getText()));
         controllers.set(8, decideTheKey(tdecvolume.getText()));
         controllers.set(9, decideTheKey(tharddrop.getText()));
-        tetrisControllerInputHandler.changeControls(controllers);
     }
 
     void textSetter(KeyEvent e, JTextField textField) {
@@ -536,6 +549,18 @@ public class TetrisSettingsView extends JFrame {
         } else if (State.RUNNING.equals(state)) {
             soundService.resumeMusic();
         }
+    }
+
+    
+    private boolean checkControllersHaveDuplicate(ArrayList<Integer> controls) {
+
+        HashSet<Integer> hashSet = new HashSet<Integer>(controls);
+        System.out.println(hashSet);
+        if(hashSet.size() < controls.size())
+            return false;
+
+        return true;
+
     }
 
 }
