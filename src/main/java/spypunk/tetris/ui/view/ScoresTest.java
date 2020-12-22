@@ -3,7 +3,7 @@ package spypunk.tetris.ui.view;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ScoresTest {
-    
+
     @org.junit.jupiter.api.Test
     //Testing the add method for the high score table
     //sending 10 different players with different scores
@@ -30,7 +30,7 @@ class ScoresTest {
 
         s.add(new HighScoreEntry(winnerName, 1000));
 
-        for (int i = 0; i < array.length; i++) {
+        for (int i = 0; i < 10; i++) {
             s.add(new HighScoreEntry("a", winnerScore - (10 * i)));
         }
 

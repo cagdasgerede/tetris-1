@@ -66,7 +66,7 @@ public class Scores{
             while (myReader.hasNextLine()) {
                 String data = myReader.nextLine();
                 String playerName = data.substring(0, data.indexOf('-'));
-                int playerScore = Integer.parseInt(data.substring(data.indexOf('-')+1));
+                int playerScore = Integer.parseInt(data.substring(data.indexOf('-') + 1));
 
                 HighScoreEntry newPlayer = new HighScoreEntry(playerName, playerScore);
                 add(newPlayer);
