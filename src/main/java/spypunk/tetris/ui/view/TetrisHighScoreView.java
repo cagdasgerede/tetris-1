@@ -6,15 +6,15 @@ import javax.swing.*;
 
 public class TetrisHighScoreView extends JFrame{
 
-    GameEntry[] entities;
+    HighScoreEntry[] entries;
 
     public TetrisHighScoreView(){
         super("TetrisHighScoreView");
 
         Scores highScoreTable = new Scores();
         highScoreTable.updateEntries();
-        entities = highScoreTable.entities();
-        JList<GameEntry> subList = new JList<>(entities);
+        entries = highScoreTable.entries();
+        JList<HighScoreEntry> subList = new JList<>(entries);
 
         setSize(200, 350);
         setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);

@@ -6,24 +6,29 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
 
+import jdk.javadoc.internal.doclets.formats.html.SourceToHTMLConverter;
+
 public class Scores{
     public static final int maxEntries = 10;
     private int numEntries;
 
-    private GameEntry[] entries;
+    private HighScoreEntry[] entries;
+
+    private final String fileName = "scoreList.txt";
 
     public Scores(){
-        entries = new GameEntry[maxEntries];
+        entries = new HighScoreEntry[maxEntries];
         numEntries = 0;
     }
 
-    public void add(GameEntry e){
+    public void add(HighScoreEntry e){
         int newScore = e.getScore();
         if(numEntries == maxEntries){
             if(newScore <= entries[numEntries-1].getScore())
                 return;
-        }else
+        }else{
             numEntries++;
+        }
 
         //last element of the array that is not empty
         int i = numEntries-1;
@@ -41,7 +46,7 @@ public class Scores{
 
     public void updateFile(){
         try {
-            FileWriter myWriter = new FileWriter("scoreList.txt");
+            FileWriter myWriter = new FileWriter(fileName);
             for (int i = 0; i < entries.length; i++) {
                 if (entries[i] != null) {
                     myWriter.write(entries[i].getName() + "-" + entries[i].getScore() + "\n");
@@ -56,14 +61,14 @@ public class Scores{
 
     public void updateEntries(){
         try {
-            File myObj = new File("scoreList.txt");
+            File myObj = new File(fileName);
             Scanner myReader = new Scanner(myObj);
             while (myReader.hasNextLine()) {
                 String data = myReader.nextLine();
                 String playerName = data.substring(0, data.indexOf('-'));
                 int playerScore = Integer.parseInt(data.substring(data.indexOf('-')+1));
 
-                GameEntry newPlayer = new GameEntry(playerName, playerScore);
+                HighScoreEntry newPlayer = new HighScoreEntry(playerName, playerScore);
                 add(newPlayer);
             }
             myReader.close();
@@ -73,16 +78,15 @@ public class Scores{
         }
     }
 
-    public GameEntry highestScore(){
+    public HighScoreEntry highestScore(){
         return entries[0];
     }
 
-    public GameEntry lowestScore(){
+    public HighScoreEntry lowestScore(){
         return entries[9];
     }
 
-    public GameEntry[] entities(){
+    public HighScoreEntry[] entries(){
         return this.entries;
     }
-
 }

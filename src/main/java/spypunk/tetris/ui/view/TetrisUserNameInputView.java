@@ -6,6 +6,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import java.awt.event.WindowEvent;
+import java.security.PKCS12Attribute;
 
 public class TetrisUserNameInputView extends JFrame {
 
@@ -36,17 +37,17 @@ public class TetrisUserNameInputView extends JFrame {
         jButton.addActionListener((e) -> {
             playerName = userInput.getText();
             playerNameGiven = true;
+            System.out.println("name entered");
         });
 
     }
 
     public String getPlayerName(){
-        System.out.println("1:" + playerName);
+        System.out.println("1: " + playerName);
         return playerName;
     }
 
     public void closeView(){
         jf.dispatchEvent(new WindowEvent(jf, WindowEvent.WINDOW_CLOSING));
     }
-
 }

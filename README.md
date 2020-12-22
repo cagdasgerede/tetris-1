@@ -44,6 +44,8 @@ mvn exec:java
 
 - P - Pause the current game
 
+- S - Open the high score table
+
 - M - Mute sound
 
 - PAGE UP - Increase the volume

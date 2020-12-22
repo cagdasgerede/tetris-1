@@ -28,6 +28,7 @@ import javax.inject.Singleton;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 
+import jdk.javadoc.internal.doclets.formats.html.SourceToHTMLConverter;
 import spypunk.tetris.factory.ShapeFactory;
 import spypunk.tetris.guice.TetrisModule.TetrisProvider;
 import spypunk.tetris.model.Movement;
@@ -38,7 +39,7 @@ import spypunk.tetris.model.Tetris;
 import spypunk.tetris.model.Tetris.State;
 import spypunk.tetris.model.TetrisEvent;
 import spypunk.tetris.model.TetrisInstance;
-import spypunk.tetris.ui.view.GameEntry;
+import spypunk.tetris.ui.view.HighScoreEntry;
 import spypunk.tetris.ui.view.Scores;
 import spypunk.tetris.ui.view.TetrisUserNameInputView;
 
@@ -57,15 +58,18 @@ public class TetrisServiceImpl implements TetrisService {
 
     private final Tetris tetris;
 
-    final Scores s = new Scores();
+    final Scores currentPlayerScore = new Scores();
 
     @Inject
     public TetrisServiceImpl(final ShapeFactory shapeFactory, @TetrisProvider final Tetris tetris) {
         this.shapeFactory = shapeFactory;
         this.tetris = tetris;
 
-        s.updateEntries();
-        tetris.setHighScore(s.highestScore().getScore());
+        currentPlayerScore.updateEntries();
+        if(currentPlayerScore.highestScore() == null)
+            tetris.setHighScore(0);
+        else
+            tetris.setHighScore(currentPlayerScore.highestScore().getScore());
     }
 
     @Override
@@ -77,7 +81,10 @@ public class TetrisServiceImpl implements TetrisService {
         tetris.setNextShape(shapeFactory.createRandomShape());
         tetris.setState(State.RUNNING);
 
-        tetris.setHighScore(s.highestScore().getScore());
+        if(currentPlayerScore.highestScore() == null)
+            tetris.setHighScore(0);
+        else
+            tetris.setHighScore(currentPlayerScore.highestScore().getScore());
 
         generateNextShape();
     }
@@ -185,20 +192,25 @@ public class TetrisServiceImpl implements TetrisService {
 
             final Integer playerScore = tetris.getScore();
 
-            if(s.lowestScore() == null || playerScore >= s.lowestScore().getScore()){
+            if(currentPlayerScore.lowestScore() == null || playerScore >= currentPlayerScore.lowestScore().getScore()){
                 TetrisUserNameInputView tetrisUserNameInputView = new TetrisUserNameInputView();
 
                 String playerName = "";
 
+                System.out.println("not added");
+
                 while(!tetrisUserNameInputView.playerNameGiven){
                     playerName = tetrisUserNameInputView.getPlayerName();
+                    System.out.println("2: " + playerName);
                     if(tetrisUserNameInputView.playerNameGiven)
                         break;
                 }
 
+                System.out.println("added");
+
                 tetrisUserNameInputView.closeView();
-                s.add(new GameEntry(playerName, playerScore));
-                tetris.setHighScore(s.highestScore().getScore());
+                currentPlayerScore.add(new HighScoreEntry(playerName, playerScore));
+                tetris.setHighScore(currentPlayerScore.highestScore().getScore());
             }
         } else {
             tetris.getTetrisEvents().add(TetrisEvent.SHAPE_LOCKED);

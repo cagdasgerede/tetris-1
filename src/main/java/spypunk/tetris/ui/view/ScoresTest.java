@@ -12,10 +12,10 @@ class ScoresTest {
         Scores s = new Scores();
         int minScore = 1000;
         for (int i = 1; i <= 10; i++) {
-            s.add(new GameEntry("a", minScore + (i*10)));
+            s.add(new HighScoreEntry("a", minScore + (i*10)));
         }
 
-        for (GameEntry player: s.entities()) {
+        for (HighScoreEntry player: s.entries()) {
             assertNotNull(player);
         }
     }
@@ -28,7 +28,7 @@ class ScoresTest {
         String playerName = "User";
         int playerScore = 1000;
 
-        s.add(new GameEntry("a", 1000));
+        s.add(new HighScoreEntry("a", 1000));
 
         assertEquals(playerScore, s.highestScore().getScore());
     }
@@ -44,7 +44,7 @@ class ScoresTest {
         String playerName = "User";
         int playerScore = 100;
 
-        s.add(new GameEntry("a", 100));
+        s.add(new HighScoreEntry("a", 100));
 
         assertNull(s.lowestScore().getScore());
     }
