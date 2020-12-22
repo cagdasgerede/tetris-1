@@ -6,9 +6,14 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
 
-import jdk.javadoc.internal.doclets.formats.html.SourceToHTMLConverter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import spypunk.tetris.ui.util.SwingUtils;
 
 public class Scores{
+    private static final Logger LOGGER = LoggerFactory.getLogger(Scores.class);
+
     public static final int maxEntries = 10;
     private int numEntries;
 
@@ -54,8 +59,7 @@ public class Scores{
             }
             myWriter.close();
         } catch (IOException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(), e);
         }
     }
 
@@ -73,8 +77,7 @@ public class Scores{
             }
             myReader.close();
         } catch (FileNotFoundException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(), e);
         }
     }
 

@@ -37,13 +37,11 @@ public class TetrisUserNameInputView extends JFrame {
         jButton.addActionListener((e) -> {
             playerName = userInput.getText();
             playerNameGiven = true;
-            System.out.println("name entered");
         });
 
     }
 
     public String getPlayerName(){
-        System.out.println("1: " + playerName);
         return playerName;
     }
 

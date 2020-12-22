@@ -197,16 +197,11 @@ public class TetrisServiceImpl implements TetrisService {
 
                 String playerName = "";
 
-                System.out.println("not added");
-
                 while(!tetrisUserNameInputView.playerNameGiven){
                     playerName = tetrisUserNameInputView.getPlayerName();
-                    System.out.println("2: " + playerName);
                     if(tetrisUserNameInputView.playerNameGiven)
                         break;
                 }
-
-                System.out.println("added");
 
                 tetrisUserNameInputView.closeView();
                 currentPlayerScore.add(new HighScoreEntry(playerName, playerScore));
