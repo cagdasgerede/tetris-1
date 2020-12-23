@@ -13,6 +13,7 @@ import static spypunk.tetris.constants.TetrisConstants.WIDTH;
 
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.io.*;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -20,11 +21,15 @@ import java.util.stream.IntStream;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import javax.swing.*;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import com.google.common.base.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import spypunk.tetris.exception.TetrisException;
 import spypunk.tetris.factory.ShapeFactory;
 import spypunk.tetris.guice.TetrisModule.TetrisProvider;
 import spypunk.tetris.model.Movement;
@@ -35,9 +40,12 @@ import spypunk.tetris.model.Tetris;
 import spypunk.tetris.model.Tetris.State;
 import spypunk.tetris.model.TetrisEvent;
 import spypunk.tetris.model.TetrisInstance;
+import spypunk.tetris.sound.cache.SoundClipCacheImpl;
 
 @Singleton
 public class TetrisServiceImpl implements TetrisService {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(TetrisServiceImpl.class);
 
     private static final int ROWS_PER_LEVEL = 10;
 
@@ -97,6 +105,55 @@ public class TetrisServiceImpl implements TetrisService {
     @Override
     public void mute() {
         tetris.setMuted(!tetris.isMuted());
+    }
+
+    @Override
+    public void save() {
+        TetrisInstance savedInstance = tetris.getTetrisInstance();
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Save");
+        try {
+            File saveFile;
+            String saveFilePath = null;
+            if (fileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
+                saveFile = fileChooser.getSelectedFile();
+                saveFilePath = saveFile.getAbsolutePath()+".sv";
+            }
+            ObjectOutputStream objectOut;
+            if(saveFilePath != null) {
+                FileOutputStream fileOut = new FileOutputStream(saveFilePath);
+                objectOut = new ObjectOutputStream(fileOut);
+                objectOut.writeObject(savedInstance);
+                objectOut.close();
+            }
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage(), e);
+            throw new TetrisException(e);
+        }
+    }
+
+    @Override
+    public void load() {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Load");
+        File loadFile;
+        String loadFilePath = "";
+        try {
+            if(fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION){
+                loadFile = fileChooser.getSelectedFile();
+                loadFilePath = loadFile.getAbsolutePath();
+            }
+            FileInputStream fileIn = new FileInputStream(loadFilePath);
+            ObjectInputStream objectIn = new ObjectInputStream(fileIn);
+
+            TetrisInstance loadedInstance = (TetrisInstance) objectIn.readObject();
+            tetris.setTetrisInstance(loadedInstance);
+            objectIn.close();
+
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage(), e);
+            throw new TetrisException(e);
+        }
     }
 
     private void applyGravity() {

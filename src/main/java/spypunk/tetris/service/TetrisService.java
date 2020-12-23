@@ -23,4 +23,8 @@ public interface TetrisService {
     void pause();
 
     void mute();
+
+    void save();
+
+    void load();
 }
