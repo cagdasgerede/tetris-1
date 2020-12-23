@@ -46,6 +46,10 @@ mvn exec:java
 
 - M - Mute sound
 
+- S - Save game
+
+- L - Load game
+
 - PAGE UP - Increase the volume
 
 - PAGE DOWN - Decrease the volume
