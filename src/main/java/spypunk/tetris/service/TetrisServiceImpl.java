@@ -40,7 +40,6 @@ import spypunk.tetris.model.Tetris;
 import spypunk.tetris.model.Tetris.State;
 import spypunk.tetris.model.TetrisEvent;
 import spypunk.tetris.model.TetrisInstance;
-import spypunk.tetris.sound.cache.SoundClipCacheImpl;
 
 @Singleton
 public class TetrisServiceImpl implements TetrisService {

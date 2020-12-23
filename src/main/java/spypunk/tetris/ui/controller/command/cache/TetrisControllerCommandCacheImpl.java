@@ -8,12 +8,10 @@
 
 package spypunk.tetris.ui.controller.command.cache;
 
-import java.io.*;
 import java.util.Map;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import javax.swing.*;
 
 import com.google.common.collect.Maps;
 
@@ -21,7 +19,6 @@ import spypunk.tetris.guice.TetrisModule.TetrisProvider;
 import spypunk.tetris.model.Movement;
 import spypunk.tetris.model.Tetris;
 import spypunk.tetris.model.Tetris.State;
-import spypunk.tetris.model.TetrisInstance;
 import spypunk.tetris.service.TetrisService;
 import spypunk.tetris.sound.Sound;
 import spypunk.tetris.sound.service.SoundService;
@@ -88,49 +85,28 @@ public class TetrisControllerCommandCacheImpl implements TetrisControllerCommand
 
     private TetrisControllerCommand createSaveGameCommand() {
         return () -> {
-            TetrisInstance savedInstance = tetris.getTetrisInstance();
-            JFileChooser fileChooser = new JFileChooser();
-            fileChooser.setDialogTitle("Save");
-            try {
-                File saveFile = null;
-                String saveFilePath = null;
-                if (fileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
-                    saveFile = fileChooser.getSelectedFile();
-                    saveFilePath = saveFile.getAbsolutePath()+".sv";
-                }
-                ObjectOutputStream objectOut = null;
-                if(saveFilePath != null) {
-                    FileOutputStream fileOut = new FileOutputStream(saveFilePath);
-                    objectOut = new ObjectOutputStream(fileOut);
-                    objectOut.writeObject(savedInstance);
-                    objectOut.close();
-                }
-            } catch (Exception ex) {
-                ex.printStackTrace();
+            boolean soundMuted = false;
+            if(!tetris.isMuted()){
+                soundService.pauseMusic();
+                soundMuted = true;
+            }
+            tetrisService.save();
+            if (soundMuted){
+                soundService.resumeMusic();
             }
         };
     }
 
     private TetrisControllerCommand createLoadGameCommand() {
         return () -> {
-            JFileChooser fileChooser = new JFileChooser();
-            fileChooser.setDialogTitle("Load");
-            File loadFile = null;
-            String loadFilePath = null;
-            try {
-                if(fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION){
-                    loadFile = fileChooser.getSelectedFile();
-                    loadFilePath = loadFile.getAbsolutePath();
-                }
-                FileInputStream fileIn = new FileInputStream(loadFilePath);
-                ObjectInputStream objectIn = new ObjectInputStream(fileIn);
-
-                TetrisInstance loadedInstance = (TetrisInstance) objectIn.readObject();
-                tetris.setTetrisInstance(loadedInstance);
-                objectIn.close();
-
-            } catch (Exception ex) {
-                ex.printStackTrace();
+            boolean soundMuted = false;
+            if(!tetris.isMuted()){
+                soundService.pauseMusic();
+                soundMuted = true;
+            }
+            tetrisService.load();
+            if (soundMuted){
+                soundService.resumeMusic();
             }
         };
     }
