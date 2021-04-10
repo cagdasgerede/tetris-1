@@ -232,6 +232,7 @@ public class TetrisServiceImpl extends JFrame implements TetrisService {
     }
 
     private void updateLevel() {
+        
         final int completedRows = tetris.getCompletedRows();
         final int nextLevel = tetris.getLevel() + 1;
 
@@ -239,6 +240,9 @@ public class TetrisServiceImpl extends JFrame implements TetrisService {
             tetris.setLevel(nextLevel);
             tetris.setSpeed(getLevelSpeed(nextLevel));
         }
+        if(nextLevel==5)
+            pause();// THİS İS THE POİNT LEVELS END AND WARNS THE PLAYER
+
     }
 
     private void updateScoreWithCompletedMovement() {
@@ -251,12 +255,12 @@ public class TetrisServiceImpl extends JFrame implements TetrisService {
         tetris.getCompletedRows();
         
 
-        if (tetris.getCompletedRows(); >= ROWS_PER_LEVEL * (tetris.getLevel()+1)) {
+        if (tetris.getCompletedRows() >= ROWS_PER_LEVEL * (tetris.getLevel()+1)) {
             setSize(800,200);
 			setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 			
 			JLabel label = new JLabel("Congratulations you have ashived the section\n");
-
+            add(label);
             System.out.println(getLevelSpeed(tetris.getLevel()+1)+"is the next level duty" );
         }
         tetris.setScore(score + rowsScore * (tetris.getLevel() + 1));
@@ -277,6 +281,7 @@ public class TetrisServiceImpl extends JFrame implements TetrisService {
     }
 
     private void clearBlockAt(final Point location) {
+
         tetris.getBlocks().remove(location);
     }
 
@@ -332,7 +337,8 @@ public class TetrisServiceImpl extends JFrame implements TetrisService {
 
         levelSpeeds.put(0, initialSpeed);
         levelSpeeds.put(9, 6);
-
+        
+        
         IntStream.range(1, 9).forEach(level -> levelSpeeds.put(level, initialSpeed - 5 * level));
         IntStream.range(10, 13).forEach(level -> levelSpeeds.put(level, 5));
         IntStream.range(13, 16).forEach(level -> levelSpeeds.put(level, 4));
