@@ -21,6 +21,8 @@ import java.util.stream.IntStream;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
@@ -37,7 +39,12 @@ import spypunk.tetris.model.TetrisEvent;
 import spypunk.tetris.model.TetrisInstance;
 
 @Singleton
-public class TetrisServiceImpl implements TetrisService {
+public class TetrisServiceImpl extends JFrame implements TetrisService {
+
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
 
     private static final int ROWS_PER_LEVEL = 10;
 
@@ -241,7 +248,17 @@ public class TetrisServiceImpl implements TetrisService {
     private void updateScoreWithCompletedRows(final int completedRows) {
         final Integer rowsScore = scorePerRows.get(completedRows);
         final int score = tetris.getScore();
+        tetris.getCompletedRows();
+        
 
+        if (tetris.getCompletedRows(); >= ROWS_PER_LEVEL * (tetris.getLevel()+1)) {
+            setSize(800,200);
+			setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+			
+			JLabel label = new JLabel("Congratulations you have ashived the section\n");
+
+            System.out.println(getLevelSpeed(tetris.getLevel()+1)+"is the next level duty" );
+        }
         tetris.setScore(score + rowsScore * (tetris.getLevel() + 1));
     }
 
