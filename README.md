@@ -12,6 +12,10 @@
 
 ![alt tag](img/screenshot_gameover.png)
 
+![alt tag](img/screenshot_name_input.png)
+
+![alt tag](img/screenshot_score_table.png)
+
 ## How to build it ?
 
 You will need a Java JDK 8+ and maven 3+.
@@ -43,6 +47,8 @@ mvn exec:java
 - CTRL - "Hard drop" current shape
 
 - P - Pause the current game
+
+- H - Show the high scores
 
 - M - Mute sound
 
