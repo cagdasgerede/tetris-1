@@ -6,21 +6,43 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.*;
-
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Achievments<T> {
-    
+    ArrayList<String> Achievment=new ArrayList<String>();
+    final  String outputFile="achievments.txt";
+    public Achievments(){
+        read(outputFile);
+
+    }
     private T t;
     int rowCount=0;
     public void set(T t) { this.t = t; }
     public T get() { return t; }
+    
     public void rowsScore(int  rowsScore){
         if(Math.abs(rowCount-rowsScore)==1);
         if(Math.abs(rowCount-rowsScore)==2){
-            messagebox("New Achievment Unlock: 2 rows");
+
+            if(!haveEverEarned("2 rows")){
+                messagebox("New Achievment Unlock: 2 rows");
+                write(outputFile, "2 rows");
+                Achievment.add("2 rows");
+           }
         }
         if(Math.abs(rowCount-rowsScore)==3){
-            messagebox("new AChievment Unlock: 3 rows");
+
+            if(!haveEverEarned("3 rows")){
+                messagebox("New Achievment Unlock: 3 rows");
+                write(outputFile, "3 rows");
+                Achievment.add("3 rows");
+           }
 
         }
 
@@ -34,16 +56,34 @@ public class Achievments<T> {
     }
     public void Score(int score){
         if(score>100){
-             messagebox("New Achievment Unlock: 100 points");
+            if(!haveEverEarned("100 points")){
+                 messagebox("New Achievment Unlock: 100 points");
+                 write(outputFile, "100 points");
+                 Achievment.add("100 points");
+            }
     }
        if(score>200){
-        messagebox("New Achievment Unlock: 100 points");
+      
+        if(!haveEverEarned("200 points")){
+            messagebox("New Achievment Unlock: 200 points");
+            write(outputFile, "200 points");
+            Achievment.add("200 points");
+       }
     }
     if(score>500){
-        messagebox("New Achievment Unlock: 100 points");
+        if(!haveEverEarned("500 points")){
+            messagebox("New Achievment Unlock: 500 points");
+            write(outputFile, "500 points");
+            Achievment.add("500 points");
+       }
+        
     }
     if(score>1000){
-        messagebox("New Achievment Unlock: 100 points");
+        if(!haveEverEarned("1000 points")){
+            messagebox("New Achievment Unlock: 1000 points");
+            write(outputFile, "1000 points");
+            Achievment.add("1000 points");
+       }
     }
         System.out.println(score+" Score");
         //infoBox("infoMessage", "titleBar");
@@ -78,6 +118,11 @@ public class Achievments<T> {
         JOptionPane.showMessageDialog(null, label);
   
      }
+     public boolean haveEverEarned(String ach){
+        
+         
+        return Achievment.contains(ach);
+     }
 
     public static void messagebox(String message){
         SwingUtilities.invokeLater(new Runnable() {
@@ -85,6 +130,38 @@ public class Achievments<T> {
                createAndShowGui(message);
             }
          });
+    }
+
+    public void read(String filename){
+
+        try {
+            File myObj = new File(filename);
+            Scanner myReader = new Scanner(myObj);
+            while (myReader.hasNextLine()) {
+               Achievment.add(myReader.nextLine());
+            }
+
+            myReader.close();
+          } catch (FileNotFoundException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+          }
+
+    }
+
+    public void write(String outputfile,String achivmentName){
+            
+        try {
+
+            PrintWriter pw = new PrintWriter(new FileWriter(new File(outputfile),true));	
+            pw.println(achivmentName);
+            pw.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
     }
 
 
