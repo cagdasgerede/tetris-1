@@ -52,7 +52,6 @@ public class Achievments<T> {
         } catch (Exception e) {
            
         }
-        System.out.println(rowsScore+" rows");
     }
     public void Score(int score){
         if(score>100){
@@ -85,15 +84,9 @@ public class Achievments<T> {
             Achievment.add("1000 points");
        }
     }
-        System.out.println(score+" Score");
-        //infoBox("infoMessage", "titleBar");
         
     }
 
-    public static void infoBox(String infoMessage, String titleBar)
-    {
-        JOptionPane.showMessageDialog(null, infoMessage, "InfoBox: " + titleBar, JOptionPane.INFORMATION_MESSAGE);
-    }
 
     private static void createAndShowGui(String message) {
 	   
