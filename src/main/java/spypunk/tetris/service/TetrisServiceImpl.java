@@ -35,6 +35,8 @@ import spypunk.tetris.model.Tetris;
 import spypunk.tetris.model.Tetris.State;
 import spypunk.tetris.model.TetrisEvent;
 import spypunk.tetris.model.TetrisInstance;
+import spypunk.tetris.model.Achievments;
+
 
 @Singleton
 public class TetrisServiceImpl implements TetrisService {
@@ -48,8 +50,11 @@ public class TetrisServiceImpl implements TetrisService {
     private final Map<Integer, Integer> levelSpeeds = createLevelSpeeds();
 
     private final Rectangle gridRectangle = new Rectangle(0, 0, WIDTH, HEIGHT);
-
+    
     private final Tetris tetris;
+
+    Achievments<Integer> p1 = new Achievments< Integer>();
+
 
     @Inject
     public TetrisServiceImpl(final ShapeFactory shapeFactory, @TetrisProvider final Tetris tetris) {
@@ -219,6 +224,7 @@ public class TetrisServiceImpl implements TetrisService {
         tetris.setCompletedRows(tetris.getCompletedRows() + completedRows);
 
         updateScoreWithCompletedRows(completedRows);
+        
         updateLevel();
 
         tetris.getTetrisEvents().add(TetrisEvent.ROWS_COMPLETED);
@@ -236,10 +242,12 @@ public class TetrisServiceImpl implements TetrisService {
 
     private void updateScoreWithCompletedMovement() {
         tetris.setScore(tetris.getScore() + 1);
+        p1.Score(tetris.getScore());
     }
 
     private void updateScoreWithCompletedRows(final int completedRows) {
         final Integer rowsScore = scorePerRows.get(completedRows);
+        p1.rowsScore(completedRows);
         final int score = tetris.getScore();
 
         tetris.setScore(score + rowsScore * (tetris.getLevel() + 1));
