@@ -35,6 +35,10 @@ import spypunk.tetris.model.Tetris;
 import spypunk.tetris.model.Tetris.State;
 import spypunk.tetris.model.TetrisEvent;
 import spypunk.tetris.model.TetrisInstance;
+import spypunk.tetris.model.Achievments;
+import javax.swing.JOptionPane;
+
+
 
 @Singleton
 public class TetrisServiceImpl implements TetrisService {
@@ -48,8 +52,11 @@ public class TetrisServiceImpl implements TetrisService {
     private final Map<Integer, Integer> levelSpeeds = createLevelSpeeds();
 
     private final Rectangle gridRectangle = new Rectangle(0, 0, WIDTH, HEIGHT);
-
+    
     private final Tetris tetris;
+
+    Achievments<String> p1 = new Achievments< String>();
+
 
     @Inject
     public TetrisServiceImpl(final ShapeFactory shapeFactory, @TetrisProvider final Tetris tetris) {
@@ -97,6 +104,23 @@ public class TetrisServiceImpl implements TetrisService {
     @Override
     public void mute() {
         tetris.setMuted(!tetris.isMuted());
+    }
+
+    public void popAchievment(){
+        Achievments<String> test=new Achievments<String>();
+        test.Achievment.set(0, " Total breaks: "+test.Achievment.get(0));
+        int achievmentPerLine = test.Achievment.size();//The ammount of achievments displayed per line
+
+        StringBuilder text = new StringBuilder();
+        for (int i=0; i<test.Achievment.size();i++){
+            text.append(test.Achievment.get(i)+", ");
+            if(i%achievmentPerLine == 0 && i>0) text.append("\n");
+        }
+        text.delete(text.length()-2, text.length()-1);
+        JOptionPane.showMessageDialog(null,"Earned Achievments:\n"+text.toString());
+        
+
+
     }
 
     private void applyGravity() {
@@ -219,6 +243,7 @@ public class TetrisServiceImpl implements TetrisService {
         tetris.setCompletedRows(tetris.getCompletedRows() + completedRows);
 
         updateScoreWithCompletedRows(completedRows);
+        
         updateLevel();
 
         tetris.getTetrisEvents().add(TetrisEvent.ROWS_COMPLETED);
@@ -236,10 +261,12 @@ public class TetrisServiceImpl implements TetrisService {
 
     private void updateScoreWithCompletedMovement() {
         tetris.setScore(tetris.getScore() + 1);
+        p1.Score(tetris.getScore());
     }
 
     private void updateScoreWithCompletedRows(final int completedRows) {
         final Integer rowsScore = scorePerRows.get(completedRows);
+        p1.rowsScore(completedRows);
         final int score = tetris.getScore();
 
         tetris.setScore(score + rowsScore * (tetris.getLevel() + 1));
