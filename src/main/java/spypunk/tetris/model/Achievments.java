@@ -15,11 +15,24 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Achievments<T> {
-    ArrayList<String> Achievment=new ArrayList<String>();
-    final  String outputFile="achievments.txt";
+    int score=0;
+    int totalScore=0;
+  public  ArrayList<String> Achievment=new ArrayList<String>();
+      String outputFile="achievments.txt";
     public Achievments(){
         read(outputFile);
-
+        if(Achievment.size()==0){
+            Achievment.add("0");
+        }
+        totalScore=Integer.parseInt(Achievment.get(0));
+    }
+    public Achievments(String output){
+        outputFile=output;
+        read(outputFile);
+        if(Achievment.size()==0){
+            Achievment.add("0");
+        }
+        totalScore=Integer.parseInt(Achievment.get(0));
     }
     private T t;
     int rowCount=0;
@@ -27,25 +40,41 @@ public class Achievments<T> {
     public T get() { return t; }
     
     public void rowsScore(int  rowsScore){
-        if(Math.abs(rowCount-rowsScore)==1);
-        if(Math.abs(rowCount-rowsScore)==2){
+        if(Math.abs(rowCount-rowsScore)==1){
+            totalScore+=10;
+            Achievment.set(0, ""+totalScore);
+            System.out.print(outputFile);
+            write(outputFile);
+            rowCount=rowCount+Math.abs(rowCount-rowsScore);
+            return;
+        }
 
+        if(Math.abs(rowCount-rowsScore)==2){
+            rowCount=rowCount+Math.abs(rowCount-rowsScore);
+            totalScore+=20;
+            Achievment.set(0, ""+totalScore);
+            write(outputFile);
             if(!haveEverEarned("2 rows")){
                 messagebox("New Achievment Unlock: 2 rows");
-                write(outputFile, "2 rows");
                 Achievment.add("2 rows");
+                write(outputFile);
+               
            }
+           return;
         }
-        if(Math.abs(rowCount-rowsScore)==3){
-
+        if(Math.abs(rowCount-rowsScore)>=3){
+            rowCount=rowCount+Math.abs(rowCount-rowsScore);
+            totalScore+=30;
+            Achievment.set(0, ""+totalScore);
+            write(outputFile);
             if(!haveEverEarned("3 rows")){
                 messagebox("New Achievment Unlock: 3 rows");
-                write(outputFile, "3 rows");
                 Achievment.add("3 rows");
+                write(outputFile);
+                
            }
-
+           return;
         }
-
 
         try {
            
@@ -57,31 +86,35 @@ public class Achievments<T> {
         if(score>100){
             if(!haveEverEarned("100 points")){
                  messagebox("New Achievment Unlock: 100 points");
-                 write(outputFile, "100 points");
                  Achievment.add("100 points");
+                 write(outputFile);
+                 
             }
     }
        if(score>200){
       
         if(!haveEverEarned("200 points")){
             messagebox("New Achievment Unlock: 200 points");
-            write(outputFile, "200 points");
             Achievment.add("200 points");
+            write(outputFile);
+           
        }
     }
     if(score>500){
         if(!haveEverEarned("500 points")){
             messagebox("New Achievment Unlock: 500 points");
-            write(outputFile, "500 points");
             Achievment.add("500 points");
+            write(outputFile);
+           
        }
         
     }
     if(score>1000){
         if(!haveEverEarned("1000 points")){
             messagebox("New Achievment Unlock: 1000 points");
-            write(outputFile, "1000 points");
             Achievment.add("1000 points");
+            write(outputFile);
+           
        }
     }
         
@@ -128,8 +161,14 @@ public class Achievments<T> {
     public void read(String filename){
 
         try {
+            String adding="";
             File myObj = new File(filename);
             Scanner myReader = new Scanner(myObj);
+            if(myReader.hasNextLine()){
+               adding =myReader.nextLine();
+                totalScore= Integer.parseInt(adding);
+                Achievment.add(adding);
+            }
             while (myReader.hasNextLine()) {
                Achievment.add(myReader.nextLine());
             }
@@ -142,18 +181,34 @@ public class Achievments<T> {
 
     }
 
-    public void write(String outputfile,String achivmentName){
+    public void write(String outputfile){
             
         try {
 
-            PrintWriter pw = new PrintWriter(new FileWriter(new File(outputfile),true));	
-            pw.println(achivmentName);
+            PrintWriter pw = new PrintWriter(new FileWriter(new File(outputfile)));	
+            for(int i=0;i<Achievment.size();i++)
+            pw.println(Achievment.get(i));
             pw.close();
 
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+
+    }
+    public String getfirst(){
+        
+        return Achievment.get(0);
+    }
+    public void setEmpty(){
+        try {
+
+            PrintWriter pw = new PrintWriter(new FileWriter(new File(outputFile)));	
+            pw.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 

@@ -1,4 +1,5 @@
-40
+90
 100 points
 200 points
-3 rows
+2 rows
+500 points

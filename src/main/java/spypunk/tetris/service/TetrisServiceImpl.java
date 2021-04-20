@@ -36,6 +36,8 @@ import spypunk.tetris.model.Tetris.State;
 import spypunk.tetris.model.TetrisEvent;
 import spypunk.tetris.model.TetrisInstance;
 import spypunk.tetris.model.Achievments;
+import javax.swing.JOptionPane;
+
 
 
 @Singleton
@@ -53,7 +55,7 @@ public class TetrisServiceImpl implements TetrisService {
     
     private final Tetris tetris;
 
-    Achievments<Integer> p1 = new Achievments< Integer>();
+    Achievments<String> p1 = new Achievments< String>();
 
 
     @Inject
@@ -102,6 +104,23 @@ public class TetrisServiceImpl implements TetrisService {
     @Override
     public void mute() {
         tetris.setMuted(!tetris.isMuted());
+    }
+
+    public void popAchievment(){
+        Achievments<String> test=new Achievments<String>();
+        test.Achievment.set(0, " Total breaks: "+test.Achievment.get(0));
+        int achievmentPerLine = test.Achievment.size();//The ammount of achievments displayed per line
+
+        StringBuilder text = new StringBuilder();
+        for (int i=0; i<test.Achievment.size();i++){
+            text.append(test.Achievment.get(i)+", ");
+            if(i%achievmentPerLine == 0 && i>0) text.append("\n");
+        }
+        text.delete(text.length()-2, text.length()-1);
+        JOptionPane.showMessageDialog(null,"Earned Achievments:\n"+text.toString());
+        
+
+
     }
 
     private void applyGravity() {
